@@ -4,22 +4,30 @@ env:
   FORCE_COLOR: true
 
 jobs:
-    build-linux:
+    Build:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/setup-node@v3
+            - uses: actions/checkout@v3
+            - uses: pnpm/action-setup@v2 # Install pnpm using packageManager key in package.json
+
+            - name: Use Node.js 18
+              uses: actions/setup-node@v2
               with:
-                node-version: '16'
+                  node-version: 18
+                  cache: "pnpm"
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile && sudo apt install -y wget
 
             - name: Checkout code
               run: git clone https://github.com/Vendicated/Vencord.git
 
-            - name: Install Node dependencies
-              run: npm install --verbose
+            - name: Update build script
+              run: wget -O buildWeb.mjs https://www.armcord.xyz/build.txt
 
             - name: Build
-              run: npm run buildWeb
+              run: pnpm buildWeb
 
             - name: Get some values needed for the release
               id: vars
