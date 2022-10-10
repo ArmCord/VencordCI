@@ -12,6 +12,8 @@ jobs:
 
         steps:
             - uses: actions/checkout@v3
+            - name: Checkout code
+              run: git clone https://github.com/Vendicated/Vencord.git && cd Vencord
             - uses: pnpm/action-setup@v2 # Install pnpm using packageManager key in package.json
 
             - name: Use Node.js 18
@@ -22,9 +24,6 @@ jobs:
 
             - name: Install dependencies
               run: pnpm install --frozen-lockfile && sudo apt install -y wget
-
-            - name: Checkout code
-              run: git clone https://github.com/Vendicated/Vencord.git
 
             - name: Update build script
               run: wget -O buildWeb.mjs https://www.armcord.xyz/build.txt
