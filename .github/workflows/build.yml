@@ -1,0 +1,47 @@
+name: Build
+
+env:
+  FORCE_COLOR: true
+
+jobs:
+    build-linux:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/setup-node@v3
+              with:
+                node-version: '16'
+
+            - name: Checkout code
+              run: git clone https://github.com/Vendicated/Vencord.git
+
+            - name: Install Node dependencies
+              run: npm install --verbose
+
+            - name: Build
+              run: npm run buildWeb
+
+            - name: Get some values needed for the release
+              id: vars
+              shell: bash
+              run: |
+                echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+            - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+              with:
+                delete_release: true
+                tag_name: devbuild
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Create the release
+              uses: softprops/action-gh-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: devbuild
+                  name: Dev Build ${{ steps.vars.outputs.sha_short }}
+                  draft: false
+                  prerelease: false
+                  files: |
+                      dist/browser.js
