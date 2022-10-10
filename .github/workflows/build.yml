@@ -12,8 +12,8 @@ jobs:
 
         steps:
             - uses: actions/checkout@v3
-            - name: Checkout code
-              run: git clone https://github.com/Vendicated/Vencord.git && cd Vencord
+              with:
+                  repository: 'Vendicated/Vencord'
             - uses: pnpm/action-setup@v2 # Install pnpm using packageManager key in package.json
 
             - name: Use Node.js 18
