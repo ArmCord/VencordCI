@@ -24,9 +24,6 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile && sudo apt install -y wget
 
-            - name: Update build script
-              run: wget -O buildWeb.mjs https://www.armcord.xyz/build.txt
-
             - name: Build web
               run: pnpm buildWeb
               
