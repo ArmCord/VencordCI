@@ -27,9 +27,12 @@ jobs:
             - name: Update build script
               run: wget -O buildWeb.mjs https://www.armcord.xyz/build.txt
 
-            - name: Build
+            - name: Build web
               run: pnpm buildWeb
-
+              
+            - name: Build
+              run: pnpm build
+              
             - name: Get some values needed for the release
               id: vars
               shell: bash
@@ -54,3 +57,7 @@ jobs:
                   prerelease: false
                   files: |
                       dist/browser.js
+                      dist/extension.zip
+                      dist/renderer.js
+                      dist/patcher.js
+                      dist/preload.js
